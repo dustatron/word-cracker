@@ -20,16 +20,21 @@ const GuessRow = ({ letters, index }: Props) => {
       <Box p="5" borderRadius={5}>
         {index}
       </Box>
-      {letters.map((l, idx) => (
-        <Box
-          key={`${l}-${idx}`}
-          p="5"
-          border="1px solid white"
-          borderRadius={5}
-        >
-          {l.letter}
-        </Box>
-      ))}
+      {letters.map((l, idx) => {
+        const correct = l.state === "correct" ? "green.300" : ""
+        const good = l.state === "good" ? "blue.300" : ""
+        return (
+          <Box
+            key={`${l}-${idx}`}
+            p="5"
+            border="1px solid white"
+            borderRadius={5}
+            background={correct || good}
+          >
+            {l.letter}
+          </Box>
+        )
+      })}
     </HStack>
   )
 }

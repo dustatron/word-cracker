@@ -1,15 +1,31 @@
+import { useState, useMemo } from "react"
 import type { NextPage } from "next"
-import { useState } from "react"
 import Head from "next/head"
 import { Text, Flex, Box, Container, Button } from "@chakra-ui/react"
 import LetterPicker from "../components/LetterPicker"
 import GuessRow from "../components/GuessRow"
 import { LetterState } from "../types"
 import styles from "../styles/Home.module.css"
+import { evalGuess } from "../utils"
+import { wordList } from "../utils"
 
 const Home: NextPage = () => {
   const [letterSet, setLetterSet] = useState<LetterState[]>([])
   const [history, setHistory] = useState<LetterState[][]>([])
+
+  const masterWord = useMemo(() => {
+    const words = wordList.split("\n")
+    const wordSelects = words.filter((word) => word.length === 5)
+    const masterWord =
+      wordSelects[
+        Math.floor(
+          Math.random() * (1 - wordSelects.length) + wordSelects.length
+        )
+      ]
+    return masterWord
+  }, [])
+
+  console.log("words", masterWord)
 
   const addALetter = (l: string) => {
     if (letterSet.length < 5) {
@@ -23,7 +39,8 @@ const Home: NextPage = () => {
 
   const makeGuess = () => {
     if (letterSet.length === 5 && history.length !== 6) {
-      const newRow = [letterSet, ...history]
+      const evalLetters = evalGuess(masterWord, letterSet)
+      const newRow = [evalLetters, ...history]
       setHistory(newRow)
       setLetterSet([])
     }
