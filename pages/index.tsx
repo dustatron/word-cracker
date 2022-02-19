@@ -1,34 +1,34 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import type { NextPage } from "next"
 import Head from "next/head"
-import { Text, Flex, Box, Container, Button } from "@chakra-ui/react"
+import { Text, Flex, Box, Container, Button, Input } from "@chakra-ui/react"
 import LetterPicker from "../components/LetterPicker"
 import GuessRow from "../components/GuessRow"
 import { LetterState } from "../types"
 import styles from "../styles/Home.module.css"
-import { evalGuess } from "../utils"
-import { wordList } from "../utils"
+import { evalGuess, numberLimiter } from "../utils"
 
-const Home: NextPage = () => {
+interface Props {
+  wordList: string[]
+  mainWord: string
+  updateLength: (number: number) => void
+  wordLength: number
+}
+
+const Home: NextPage<Props> = ({
+  wordList,
+  mainWord,
+  updateLength,
+  wordLength,
+}) => {
   const [letterSet, setLetterSet] = useState<LetterState[]>([])
   const [history, setHistory] = useState<LetterState[][]>([])
+  const [inputValue, setInputValue] = useState<number>(wordLength)
 
-  const masterWord = useMemo(() => {
-    const words = wordList.split("\n")
-    const wordSelects = words.filter((word) => word.length === 5)
-    const masterWord =
-      wordSelects[
-        Math.floor(
-          Math.random() * (1 - wordSelects.length) + wordSelects.length
-        )
-      ]
-    return masterWord
-  }, [])
-
-  console.log("words", masterWord)
+  console.log("words", mainWord)
 
   const addALetter = (l: string) => {
-    if (letterSet.length < 5) {
+    if (letterSet.length < wordLength) {
       const newLetterSet: LetterState[] = [
         ...letterSet,
         { letter: l, state: "guess" },
@@ -38,8 +38,8 @@ const Home: NextPage = () => {
   }
 
   const makeGuess = () => {
-    if (letterSet.length === 5 && history.length !== 6) {
-      const evalLetters = evalGuess(masterWord, letterSet)
+    if (letterSet.length === wordLength && history.length !== wordLength + 1) {
+      const evalLetters = evalGuess(mainWord, letterSet)
       const newRow = [evalLetters, ...history]
       setHistory(newRow)
       setLetterSet([])
@@ -90,20 +90,24 @@ const Home: NextPage = () => {
             addALetter={addALetter}
             makeGuess={makeGuess}
             removeLastLetter={removeLastLetter}
-            isGuessReady={letterSet.length !== 5}
+            isGuessReady={letterSet.length !== wordLength}
           />
           <Button onClick={handleStartOver}>Start Over</Button>
         </Container>
       </main>
-
+      <Box w="50%">
+        <Text>Word Length</Text>
+        <Input
+          type="number"
+          value={inputValue}
+          onChange={(e) => {
+            numberLimiter(parseInt(e.target.value), setInputValue)
+            updateLength(parseInt(e.target.value))
+          }}
+        />
+      </Box>
       <footer className={styles.footer}>
-        <a
-          href="https://www.pdxmccord.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by PDX-McCord
-        </a>
+        <p>Powered by PDX-McCord</p>
       </footer>
     </div>
   )

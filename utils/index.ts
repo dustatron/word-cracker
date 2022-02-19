@@ -1,4 +1,5 @@
-import { wordList } from "./wordList"
 import { evalGuess } from "./evalGuess"
+import { useWordList } from "./useWordList"
+import { numberLimiter } from "./numberLimiter"
 
-export { wordList, evalGuess }
+export { evalGuess, useWordList, numberLimiter }
