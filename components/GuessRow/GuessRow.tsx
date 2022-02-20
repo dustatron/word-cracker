@@ -32,7 +32,7 @@ const GuessRow = ({ letters, wordLength }: Props) => {
     >
       {letterArray.map((l, idx) => {
         const correct = l.state === "correct" ? "green.300" : ""
-        const good = l.state === "good" ? "blue.300" : ""
+        const good = l.state === "good" ? "yellow.400" : ""
         return (
           <Box
             key={`${l}-${idx}`}
