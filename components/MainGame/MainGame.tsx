@@ -6,17 +6,13 @@ import { LetterState } from "../../types"
 import { evalGuess, evalWin } from "../../utils"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { useGameData } from "../../context/GameDataContext"
 
-interface Props {
-  wordList: string[]
-  mainWord: string
-  updateLength: (number: number) => void
-  wordLength: number
-}
 const TURN_COUNT = 6
-const MainGame = ({ wordList, mainWord, wordLength }: Props) => {
-  const [letterSet, setLetterSet] = useState<LetterState[]>([])
-  const [history, setHistory] = useState<LetterState[][]>([])
+const MainGame = () => {
+  const { mainWord, wordLength, history, setHistory, letterSet, setLetterSet } =
+    useGameData()
+
   const router = useRouter()
 
   console.log("mainWord", mainWord)

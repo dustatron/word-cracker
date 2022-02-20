@@ -1,21 +1,22 @@
 import type { NextPage } from "next"
+import { useEffect } from "react"
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import MainGame from "../components/MainGame"
+import { useGameData } from "../context/GameDataContext"
 
-interface Props {
-  wordList: string[]
-  mainWord: string
-  updateLength: (number: number) => void
-  wordLength: number
-}
+const Home: NextPage = () => {
+  const { updateLength, makeGame } = useGameData()
+  useEffect(() => {
+    const mainWordLenth = window.localStorage["word-cracker-length"]
+    if (typeof mainWordLenth === "string") {
+      updateLength(parseInt(mainWordLenth))
+      makeGame()
+    } else {
+      window.localStorage["word-cracker-length"] = 5
+    }
+  }, [])
 
-const Home: NextPage<Props> = ({
-  wordList,
-  mainWord,
-  updateLength,
-  wordLength,
-}) => {
   return (
     <div>
       <Head>
@@ -24,12 +25,7 @@ const Home: NextPage<Props> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <MainGame
-          wordLength={wordLength}
-          mainWord={mainWord}
-          updateLength={updateLength}
-          wordList={wordList}
-        />
+        <MainGame />
       </main>
       <footer className={styles.footer}>
         <p>Powered by PDX-McCord</p>

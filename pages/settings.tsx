@@ -10,13 +10,10 @@ import {
 } from "@chakra-ui/react"
 import Link from "next/link"
 import { numberLimiter } from "../utils"
+import { useGameData } from "../context/GameDataContext"
 
-type Props = {
-  updateLength: (number: number) => void
-  wordLength: number
-}
-
-const Settings = ({ updateLength, wordLength }: Props) => {
+const Settings = () => {
+  const { wordLength, updateLength } = useGameData()
   const [inputValue, setInputValue] = useState<number>(() => wordLength)
   return (
     <Container>
