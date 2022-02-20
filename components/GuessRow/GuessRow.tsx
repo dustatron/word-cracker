@@ -4,10 +4,23 @@ import { LetterState } from "../../types"
 
 type Props = {
   letters: LetterState[]
-  index: number
+  wordLength?: number
 }
 
-const GuessRow = ({ letters, index }: Props) => {
+const GuessRow = ({ letters, wordLength }: Props) => {
+  // @ts-ignore
+  const starterArray = Array.apply(null, { length: wordLength }).map(
+    (l, idx) => {
+      if (letters && letters[idx]?.letter) {
+        return letters[idx]
+      } else {
+        return { letter: "", state: "guess" }
+      }
+    }
+  )
+  const letterArray =
+    wordLength && letters.length < wordLength ? starterArray : letters
+
   return (
     <HStack
       w="100%"
@@ -17,10 +30,7 @@ const GuessRow = ({ letters, index }: Props) => {
       alignContent="center"
       height="5rem"
     >
-      <Box p="5" borderRadius={5}>
-        {index}
-      </Box>
-      {letters.map((l, idx) => {
+      {letterArray.map((l, idx) => {
         const correct = l.state === "correct" ? "green.300" : ""
         const good = l.state === "good" ? "blue.300" : ""
         return (

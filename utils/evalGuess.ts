@@ -34,3 +34,10 @@ export const evalGuess = (
   // @ts-ignore
   return withGoodButWrongSpace
 }
+export const evalWin = (
+  letters: LetterState[],
+  mainLength: number
+): boolean => {
+  const corrects = letters.filter((l) => l.state === "correct")
+  return corrects.length === mainLength
+}

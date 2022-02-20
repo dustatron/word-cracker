@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
 import { ChakraProvider, extendTheme, type ThemeConfig } from "@chakra-ui/react"
@@ -11,7 +11,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   const theme = extendTheme({ config })
-  const [wordLength, setWordLength] = useState<number>(() => 5)
+  const [wordLength, setWordLength] = useState<number>(5)
+
+  useEffect(() => {
+    const mainWordLenth = window.localStorage["word-cracker-length"]
+    if (typeof mainWordLenth === "string") {
+      setWordLength(parseInt(mainWordLenth))
+    } else {
+      window.localStorage["word-cracker-length"] = 5
+    }
+  }, [])
+
+  const handleUpdateLength = (num: number) => {
+    const updateNumber = numberLimiter(num, setWordLength)
+    window.localStorage["word-cracker-length"] = updateNumber
+  }
   const { list: wordList, mainWord } = useWordList(wordLength)
 
   return (
@@ -21,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         wordList={wordList}
         mainWord={mainWord}
         wordLength={wordLength}
-        updateLength={(num: number) => numberLimiter(num, setWordLength)}
+        updateLength={handleUpdateLength}
       />
     </ChakraProvider>
   )
