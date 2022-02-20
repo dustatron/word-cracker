@@ -15,7 +15,7 @@ export const evalGuess = (
       return l
     }
   })
-  const withGoodButWrongSpace = correctResults.map((l, idx) => {
+  const withGoodButWrongSpace = correctResults.map((l) => {
     if (l.state === "correct") {
       return l
     } else if (masterTrimmed.includes(l.letter.toLocaleLowerCase())) {
@@ -28,7 +28,7 @@ export const evalGuess = (
         letter: l.letter,
       }
     } else {
-      return l
+      return { state: "wrong", letter: l.letter }
     }
   })
   // @ts-ignore

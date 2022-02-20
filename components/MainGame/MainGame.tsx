@@ -10,8 +10,16 @@ import { useGameData } from "../../context/GameDataContext"
 
 const TURN_COUNT = 6
 const MainGame = () => {
-  const { mainWord, wordLength, history, setHistory, letterSet, setLetterSet } =
-    useGameData()
+  const {
+    mainWord,
+    wordLength,
+    history,
+    setHistory,
+    letterSet,
+    setLetterSet,
+    guessHistory,
+    setGuessHistory,
+  } = useGameData()
 
   const router = useRouter()
 
@@ -35,6 +43,14 @@ const MainGame = () => {
     if (letterSet.length === wordLength && history.length !== TURN_COUNT) {
       const evalLetters = evalGuess(mainWord, letterSet)
       const isWin = evalWin(evalLetters, wordLength)
+      const newGuessHistory = guessHistory.map((guess) => {
+        const updateLetter = evalLetters.find((l) => l.letter == guess.letter)
+        if (updateLetter) {
+          return updateLetter
+        }
+        return guess
+      })
+      setGuessHistory(newGuessHistory)
       if (isWin) {
         router.push("/win")
       } else {
@@ -94,6 +110,7 @@ const MainGame = () => {
         makeGuess={makeGuess}
         removeLastLetter={removeLastLetter}
         isGuessReady={letterSet.length !== wordLength}
+        letterSet={letterSet}
       />
     </Container>
   )

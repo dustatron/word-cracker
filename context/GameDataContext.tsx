@@ -12,6 +12,8 @@ const initialState: GameDataHook = {
   setHistory: () => {},
   setLetterSet: () => {},
   makeGame: () => {},
+  guessHistory: [],
+  setGuessHistory: () => {},
 }
 const GameDataContext = createContext<GameDataHook>(initialState)
 
@@ -29,6 +31,8 @@ interface GameDataHook {
   setLetterSet: (letters: LetterState[]) => void
   setHistory: (row: LetterState[][]) => void
   makeGame: () => void
+  guessHistory: LetterState[]
+  setGuessHistory: (history: LetterState[]) => void
 }
 const GameDataProvider = ({ children }: any): ReactElement => {
   const [wordLength, setWordLength] = useState<number>(5)
@@ -36,6 +40,7 @@ const GameDataProvider = ({ children }: any): ReactElement => {
   const [history, setHistory] = useState<LetterState[][]>([])
   const [wordList, setWordList] = useState<string[]>([])
   const [mainWord, setMainWord] = useState<string>("")
+  const [guessHistory, setGuessHistory] = useState<LetterState[]>([])
 
   const updateLength = (num: number) => {
     const updateNumber = numberLimiter(num, setWordLength)
@@ -57,6 +62,8 @@ const GameDataProvider = ({ children }: any): ReactElement => {
     setLetterSet,
     setHistory,
     makeGame,
+    guessHistory,
+    setGuessHistory,
   }
   return (
     <GameDataContext.Provider value={value}>
