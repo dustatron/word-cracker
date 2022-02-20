@@ -27,6 +27,7 @@ const MainGame = () => {
 
   useEffect(() => {
     setHistory([])
+    setLetterSet([])
   }, [])
 
   const addALetter = (l: string) => {
@@ -52,6 +53,7 @@ const MainGame = () => {
       })
       setGuessHistory(newGuessHistory)
       if (isWin) {
+        setLetterSet([])
         router.push("/win")
       } else {
         const newRow = [evalLetters, ...history]
