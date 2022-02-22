@@ -11,9 +11,10 @@ const Home: NextPage = () => {
     const mainWordLenth = window.localStorage["word-cracker-length"]
     if (typeof mainWordLenth === "string") {
       updateLength(parseInt(mainWordLenth))
-      makeGame()
+      makeGame(parseInt(mainWordLenth))
     } else {
-      window.localStorage["word-cracker-length"] = 5
+      updateLength(5)
+      makeGame()
     }
   }, [])
 

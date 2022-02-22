@@ -11,22 +11,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   const theme = extendTheme({ config })
-  // const [wordLength, setWordLength] = useState<number>(5)
-
-  // useEffect(() => {
-  //   const mainWordLenth = window.localStorage["word-cracker-length"]
-  //   if (typeof mainWordLenth === "string") {
-  //     setWordLength(parseInt(mainWordLenth))
-  //   } else {
-  //     window.localStorage["word-cracker-length"] = 5
-  //   }
-  // }, [])
-
-  // const handleUpdateLength = (num: number) => {
-  //   const updateNumber = numberLimiter(num, setWordLength)
-  //   window.localStorage["word-cracker-length"] = updateNumber
-  // }
-  // const { list: wordList, mainWord } = useWordList(wordLength)
 
   return (
     <ChakraProvider theme={theme}>

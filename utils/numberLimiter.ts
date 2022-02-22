@@ -1,5 +1,4 @@
-export const numberLimiter = (num: number, updater: (num: number) => void) => {
+export const numberLimiter = (num: number) => {
   const updateNumber = num > 14 ? 14 : num < 2 ? 2 : num
-  updater(updateNumber)
   return updateNumber
 }

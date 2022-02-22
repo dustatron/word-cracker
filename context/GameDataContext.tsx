@@ -30,7 +30,7 @@ interface GameDataHook {
   updateLength: (num: number) => void
   setLetterSet: (letters: LetterState[]) => void
   setHistory: (row: LetterState[][]) => void
-  makeGame: () => void
+  makeGame: (length?: number) => void
   guessHistory: LetterState[]
   setGuessHistory: (history: LetterState[]) => void
 }
@@ -43,12 +43,13 @@ const GameDataProvider = ({ children }: any): ReactElement => {
   const [guessHistory, setGuessHistory] = useState<LetterState[]>([])
 
   const updateLength = (num: number) => {
-    const updateNumber = numberLimiter(num, setWordLength)
+    const updateNumber = numberLimiter(num)
+    setWordLength(updateNumber)
     window.localStorage["word-cracker-length"] = updateNumber
   }
 
-  const makeGame = () => {
-    const { list, main } = setUpGame(wordLength)
+  const makeGame = (length?: number) => {
+    const { list, main } = setUpGame(length || wordLength)
     setWordList(list), setMainWord(main)
   }
 

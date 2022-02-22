@@ -36,7 +36,7 @@ const Settings = () => {
           type="number"
           value={inputValue}
           onChange={(e) => {
-            numberLimiter(parseInt(e.target.value), setInputValue)
+            setInputValue(numberLimiter(parseInt(e.target.value)))
             updateLength(parseInt(e.target.value))
           }}
         />
