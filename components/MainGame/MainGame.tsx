@@ -44,7 +44,7 @@ const MainGame = () => {
     if (letterSet.length === wordLength && history.length !== TURN_COUNT) {
       const evalLetters = evalGuess(mainWord, letterSet)
       const isWin = evalWin(evalLetters, wordLength)
-      const newGuessHistory = guessHistory.map((guess) => {
+      const newGuessHistory: LetterState[] = guessHistory.map((guess): LetterState => {
         // Find all occurrences of this letter in the current guess
         const matchingLetters = evalLetters.filter(
           (l) => l.letter.toLowerCase() === guess.letter.toLowerCase()
@@ -55,11 +55,11 @@ const MainGame = () => {
           const hasGood = matchingLetters.some((l) => l.state === "good")
 
           if (hasCorrect || guess.state === "correct") {
-            return { letter: guess.letter, state: "correct" }
+            return { letter: guess.letter, state: "correct" as const }
           } else if (hasGood || guess.state === "good") {
-            return { letter: guess.letter, state: "good" }
+            return { letter: guess.letter, state: "good" as const }
           } else {
-            return { letter: guess.letter, state: "wrong" }
+            return { letter: guess.letter, state: "wrong" as const }
           }
         }
         return guess
