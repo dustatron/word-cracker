@@ -4,11 +4,22 @@ import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import MainGame from "../components/MainGame"
 import { useGameData } from "../context/GameDataContext"
+import { WordListMode } from "../utils"
 
 const Home: NextPage = () => {
-  const { updateLength, makeGame } = useGameData()
+  const { updateLength, makeGame, updateWordListMode } = useGameData()
   useEffect(() => {
     const mainWordLenth = window.localStorage["word-cracker-length"]
+    const savedWordListMode = window.localStorage[
+      "word-cracker-wordlist-mode"
+    ] as WordListMode | undefined
+
+    // Initialize word list mode
+    if (savedWordListMode === "common" || savedWordListMode === "extended") {
+      updateWordListMode(savedWordListMode)
+    }
+
+    // Initialize word length and start game
     if (typeof mainWordLenth === "string") {
       updateLength(parseInt(mainWordLenth))
       makeGame(parseInt(mainWordLenth))
