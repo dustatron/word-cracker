@@ -1,6 +1,6 @@
 import React, { useContext, createContext, ReactElement, useState } from "react"
 import { LetterState } from "../types"
-import { numberLimiter, setUpGame } from "../utils"
+import { numberLimiter, setUpGame, WordListMode } from "../utils"
 
 const initialState: GameDataHook = {
   letterSet: [],
@@ -14,6 +14,8 @@ const initialState: GameDataHook = {
   makeGame: () => {},
   guessHistory: [],
   setGuessHistory: () => {},
+  wordListMode: "common",
+  updateWordListMode: () => {},
 }
 const GameDataContext = createContext<GameDataHook>(initialState)
 
@@ -33,6 +35,8 @@ interface GameDataHook {
   makeGame: (length?: number) => void
   guessHistory: LetterState[]
   setGuessHistory: (history: LetterState[]) => void
+  wordListMode: WordListMode
+  updateWordListMode: (mode: WordListMode) => void
 }
 const GameDataProvider = ({ children }: any): ReactElement => {
   const [wordLength, setWordLength] = useState<number>(5)
@@ -41,6 +45,7 @@ const GameDataProvider = ({ children }: any): ReactElement => {
   const [wordList, setWordList] = useState<string[]>([])
   const [mainWord, setMainWord] = useState<string>("")
   const [guessHistory, setGuessHistory] = useState<LetterState[]>([])
+  const [wordListMode, setWordListMode] = useState<WordListMode>("common")
 
   const updateLength = (num: number) => {
     const updateNumber = numberLimiter(num)
@@ -48,8 +53,13 @@ const GameDataProvider = ({ children }: any): ReactElement => {
     window.localStorage["word-cracker-length"] = updateNumber
   }
 
+  const updateWordListMode = (mode: WordListMode) => {
+    setWordListMode(mode)
+    window.localStorage["word-cracker-wordlist-mode"] = mode
+  }
+
   const makeGame = (length?: number) => {
-    const { list, main } = setUpGame(length || wordLength)
+    const { list, main } = setUpGame(length || wordLength, wordListMode)
     setWordList(list), setMainWord(main)
   }
 
@@ -65,6 +75,8 @@ const GameDataProvider = ({ children }: any): ReactElement => {
     makeGame,
     guessHistory,
     setGuessHistory,
+    wordListMode,
+    updateWordListMode,
   }
   return (
     <GameDataContext.Provider value={value}>
