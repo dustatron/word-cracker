@@ -9,7 +9,6 @@ import Link from "next/link"
 import { useGameData } from "../../context/GameDataContext"
 import { alpha } from "../LetterPicker/utils"
 
-const TURN_COUNT = 6
 const MainGame = () => {
   const {
     mainWord,
@@ -21,6 +20,7 @@ const MainGame = () => {
     guessHistory,
     setGuessHistory,
     makeGame,
+    guessLimit,
   } = useGameData()
 
   const router = useRouter()
@@ -43,7 +43,7 @@ const MainGame = () => {
   }
 
   const makeGuess = () => {
-    if (letterSet.length === wordLength && history.length !== TURN_COUNT) {
+    if (letterSet.length === wordLength && history.length !== guessLimit) {
       const evalLetters = evalGuess(mainWord, letterSet)
       const isWin = evalWin(evalLetters, wordLength)
       const newGuessHistory: LetterState[] = guessHistory.map((guess): LetterState => {
@@ -123,7 +123,7 @@ const MainGame = () => {
         </Box>
       </Flex>
       <Box>
-        {history.length === 6 && (
+        {history.length === guessLimit && (
           <Box>
             <Text as="h3" fontSize={30} align="center">
               Too many turns
@@ -133,7 +133,7 @@ const MainGame = () => {
             </Text>
           </Box>
         )}
-        {history.length !== TURN_COUNT && (
+        {history.length !== guessLimit && (
           <GuessRow letters={letterSet} wordLength={wordLength} />
         )}
 
