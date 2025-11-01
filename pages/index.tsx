@@ -7,16 +7,23 @@ import { useGameData } from "../context/GameDataContext"
 import { WordListMode } from "../utils"
 
 const Home: NextPage = () => {
-  const { updateLength, makeGame, updateWordListMode } = useGameData()
+  const { updateLength, makeGame, updateWordListMode, updateGuessLimit } =
+    useGameData()
   useEffect(() => {
     const mainWordLenth = window.localStorage["word-cracker-length"]
     const savedWordListMode = window.localStorage[
       "word-cracker-wordlist-mode"
     ] as WordListMode | undefined
+    const savedGuessLimit = window.localStorage["word-cracker-guess-limit"]
 
     // Initialize word list mode
     if (savedWordListMode === "common" || savedWordListMode === "extended") {
       updateWordListMode(savedWordListMode)
+    }
+
+    // Initialize guess limit
+    if (typeof savedGuessLimit === "string") {
+      updateGuessLimit(parseInt(savedGuessLimit))
     }
 
     // Initialize word length and start game

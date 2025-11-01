@@ -12,13 +12,23 @@ import {
   Stack,
 } from "@chakra-ui/react"
 import Link from "next/link"
-import { numberLimiter, WordListMode } from "../utils"
+import { numberLimiter, guessLimiter, WordListMode } from "../utils"
 import { useGameData } from "../context/GameDataContext"
 
 const Settings = () => {
-  const { wordLength, updateLength, wordListMode, updateWordListMode } =
-    useGameData()
+  const {
+    wordLength,
+    updateLength,
+    wordListMode,
+    updateWordListMode,
+    guessLimit,
+    updateGuessLimit,
+    makeGame,
+  } = useGameData()
   const [inputValue, setInputValue] = useState<number>(() => wordLength)
+  const [guessLimitInputValue, setGuessLimitInputValue] = useState<number>(
+    () => guessLimit
+  )
   return (
     <Container>
       <Flex justifyContent="center">
@@ -46,6 +56,24 @@ const Settings = () => {
             updateLength(parseInt(e.target.value))
           }}
         />
+      </Box>
+      <Box w="50%" mt={6}>
+        <Text fontSize="20" fontWeight="bold" mb={2}>
+          Number of Guesses
+        </Text>
+        <Input
+          type="number"
+          value={guessLimitInputValue}
+          onChange={(e) => {
+            const newLimit = guessLimiter(parseInt(e.target.value))
+            setGuessLimitInputValue(newLimit)
+            updateGuessLimit(newLimit)
+            makeGame()
+          }}
+        />
+        <Text fontSize="sm" color="gray.400" mt={1}>
+          Range: 3-12 guesses (default: 6)
+        </Text>
       </Box>
       <Box w="50%" mt={6}>
         <Text fontSize="20" fontWeight="bold" mb={2}>
