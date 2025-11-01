@@ -7,6 +7,7 @@ import { evalGuess, evalWin } from "../../utils"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useGameData } from "../../context/GameDataContext"
+import { alpha } from "../LetterPicker/utils"
 
 const TURN_COUNT = 6
 const MainGame = () => {
@@ -19,6 +20,7 @@ const MainGame = () => {
     setLetterSet,
     guessHistory,
     setGuessHistory,
+    makeGame,
   } = useGameData()
 
   const router = useRouter()
@@ -86,6 +88,22 @@ const MainGame = () => {
     }
   }
 
+  const resetGame = () => {
+    // Clear all game state
+    setHistory([])
+    setLetterSet([])
+
+    // Reset keyboard colors to initial state
+    setGuessHistory(
+      alpha.map((letter): LetterState => {
+        return { letter, state: "guess" }
+      })
+    )
+
+    // Generate new word
+    makeGame()
+  }
+
   return (
     <Container>
       <Flex justifyContent="center">
@@ -93,6 +111,9 @@ const MainGame = () => {
           Word Cracker
         </Text>
         <Spacer />
+        <Box padding={"3"}>
+          <Button onClick={resetGame}>New Game</Button>
+        </Box>
         <Box padding={"3"}>
           <Link href={"/settings"}>
             <a>
